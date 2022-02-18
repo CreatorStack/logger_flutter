@@ -5,11 +5,11 @@ author: Simon Leier <simonleier@gmail.com>
 homepage: https://github.com/leisim/logger_flutter
 
 environment:
-  sdk: ">=2.2.2 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
   logger: ">=1.0.0"
-  sensors: ^0.4.2+4
+  sensors: 2.0.3

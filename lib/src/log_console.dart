@@ -8,7 +8,7 @@ class LogConsole extends StatefulWidget {
 
   LogConsole({this.dark = false, this.showCloseButton = false});
 
-  static Future<void> open(BuildContext context, {bool dark}) async {
+  static Future<void> open(BuildContext context, {bool? dark}) async {
     var logConsole = LogConsole(
       showCloseButton: true,
       dark: dark ?? Theme.of(context).brightness == Brightness.dark,
@@ -24,7 +24,7 @@ class LogConsole extends StatefulWidget {
   }
 
   static void add(OutputEvent outputEvent, {int bufferSize = 20}) {
-    while (_outputEventBuffer.length >= (bufferSize ?? 1)) {
+    while (_outputEventBuffer.length >= (bufferSize)) {
       _outputEventBuffer.removeFirst();
     }
     _outputEventBuffer.add(outputEvent);
@@ -50,7 +50,7 @@ class _LogConsoleState extends State<LogConsole> {
   var _scrollController = ScrollController();
   var _filterController = TextEditingController();
 
-  Level _filterLevel = Level.verbose;
+  Level? _filterLevel = Level.verbose;
   double _logFontSize = 14;
 
   var _currentId = 0;
@@ -63,7 +63,8 @@ class _LogConsoleState extends State<LogConsole> {
 
     _scrollController.addListener(() {
       if (!_scrollListenerEnabled) return;
-      var scrolledToBottom = _scrollController.offset >= _scrollController.position.maxScrollExtent;
+      var scrolledToBottom = _scrollController.offset >=
+          _scrollController.position.maxScrollExtent;
       setState(() {
         _followBottom = scrolledToBottom;
       });
@@ -83,7 +84,7 @@ class _LogConsoleState extends State<LogConsole> {
 
   void _refreshFilter() {
     var newFilteredBuffer = _renderedBuffer.where((it) {
-      var logLevelMatches = it.level.index >= _filterLevel.index;
+      var logLevelMatches = it.level.index >= _filterLevel!.index;
       if (!logLevelMatches) {
         return false;
       } else if (_filterController.text.isNotEmpty) {
@@ -261,7 +262,7 @@ class _LogConsoleState extends State<LogConsole> {
                 value: Level.wtf,
               )
             ],
-            onChanged: (value) {
+            onChanged: (dynamic value) {
               _filterLevel = value;
               _refreshFilter();
             },
@@ -302,8 +303,8 @@ class _LogConsoleState extends State<LogConsole> {
 }
 
 class LogBar extends StatelessWidget {
-  final bool dark;
-  final Widget child;
+  final bool? dark;
+  final Widget? child;
 
   LogBar({this.dark, this.child});
 
@@ -314,15 +315,15 @@ class LogBar extends StatelessWidget {
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
-            if (!dark)
+            if (!dark!)
               BoxShadow(
-                color: Colors.grey[400],
+                color: Colors.grey[400]!,
                 blurRadius: 3,
               ),
           ],
         ),
         child: Material(
-          color: dark ? Colors.blueGrey[900] : Colors.white,
+          color: dark! ? Colors.blueGrey[900] : Colors.white,
           child: Padding(
             padding: EdgeInsets.fromLTRB(15, 8, 15, 8),
             child: child,
